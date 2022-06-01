@@ -1,0 +1,143 @@
+<%- include ("../../partials/admin-side-bar.ejs") %>
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<!--Get your own code at fontawesome.com-->
+<div class="main-panel">
+  <div class="content-wrapper"> 
+    <div class="row">
+      <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-sm-flex align-items-center mb-4">
+              <h4 class="card-title mb-sm-0">Category List</h4>
+              <a href="/admin/add-category" class="text-dark ml-auto mb-3 mb-sm-0"><button type="submit" class="btn btn-primary mr-2">Add Category</button></a>
+            </div>
+            <div class="table-responsive border rounded p-1">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th class="font-weight-bold">Sl No</th>
+                    <th class="font-weight-bold">Category Name</th>                    
+                    <th class="font-weight-bold">Content</th> 
+                    <th class="font-weight-bold">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% for (var i = 0; i < category.length; i++) { %>
+                    <tr>
+                        <td><%= i+1; %></td>
+                        <td><%= category[i].category; %></td>
+                        <td><%= category[i].content; %></td>                        
+                        <td>                         
+                            <div class="d-flex">
+                            <span class="add-edit-button mr-2">
+                                <a href="/admin/edit-category/<%= Buffer.from("categoryList="+category[i].id).toString('base64')%>">                                     
+                                  <img src="../images/edit.png" alt="" style="height:30px;width:33px">
+                                </a>
+                            </span>
+                            <span class="action-btn deleteCategory" data-id="<%= category[i].id; %>" style="cursor:pointer">
+                                <img src="../images/delete.png" width="15" alt="" style="height:30px;width:33px">
+                            </span>
+                            </div>   
+                        </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+              </table>
+            </div>           
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- content-wrapper ends --> 
+</div>
+
+<%- include ("../../partials/admin-header.ejs") %>
+
+<div class="modal" id="deleteModal">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+              <h4 class="modal-title">Are You Sure?</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <!-- Modal body -->
+          <div class="modal-body">
+              Are You Sure You Want to Delete this Category ?
+          </div>
+          <!-- Modal footer -->
+          <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+              <button type="button" class="btn btn-danger" id="delete">Yes</button>
+          </div>
+      </div>
+  </div>
+</div>
+<div class="feedback-section" id="feedbackSection"><span></span></div>
+<script type="text/javascript">
+  $(document).ready(function () {
+      let deleteCourse;
+      $('body').on('click','.deleteCategory',function(){
+          deleteCategory=$(this).data('id');         
+          $("#deleteModal").modal('toggle');
+      }).on('click','#delete',function (){
+          let element=$(this);         
+          let formData=new FormData(); 
+          formData.append('deleteCategory',deleteCategory);           
+          element.attr("disabled","disabled").html("Please Wait..");
+        $.ajax({
+            type: "POST",
+            url: '/admin/delete-category',           
+            data: formData,
+            dataType: "json",
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {          
+                if (data.success) {
+                    messageDisplay(data.message, 2000, "success");   
+                    setTimeout(function(){ 
+                       window.location.reload();
+                        }, 2000);     
+               } else {
+                    messageDisplay(data.message, 2000, "error");                   
+               } 
+            },
+        });
+      })     
+      
+  })
+  function messageDisplay(message, timeOut, type) {
+    type = $.trim(type);
+    if (type == "") {
+        type = "error";
+    }
+    if ($.trim(timeOut) == "") {
+        timeOut = 1500;
+    }
+    var element = $(".feedback-section");
+    var color = "#f06b7c";
+    if (type == "success") {
+        color = "#4caf50";
+    } else if (type == "error") {
+        color = "#f06b7c";
+    }
+    element.attr("style", "background-color:" + color);
+    $("div.feedback-section span").html(message);
+    element.animate({
+        height: 70
+    }, 300).show();
+
+    if (timeOut != -1) {
+        setTimeout(function () {
+            element.animate({
+                height: 0
+            }, 300, function () {
+                element.hide();
+            });
+        }, timeOut);
+    }
+} 
+</script>

@@ -1,0 +1,338 @@
+<%- include ("../../partials/admin-side-bar.ejs") %>
+ <!-- partial -->
+
+ <div class="main-panel">
+  <div class="content-wrapper">
+    
+    <div class="row">        
+      <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <div class="mb-3 text-dark admin-heading d-flex">
+              <a href="/admin/courses-list">
+                  <img src="../images/back_arrow.svg" class="mb-2" style="width: 25px;">
+              </a> <h4 class="card-title ml-3">Add Course</h4>
+            </div>
+                        
+            <div class="forms-sample col-md-8 mt-5">
+              
+              <div class="row">
+                <div class="form-group col-md-6">   
+                  <label for="category">Category</label>
+                  <select class="form-control text-dark" id="category">
+                    <option value="">Select Category</option>
+                    <% for (var i = 0; i < category.length; i++) { %>
+                      <option value="<%= category[i].id%>"><%= category[i].category%></option> 
+                    <% } %>                                      
+                  </select>
+                </div>  
+                <div class="form-group col-md-6">   
+                  <label for="course_type">Course Type</label>
+                  <select class="form-control  text-dark" id="course_type">
+                    <option value="">Select Course Type</option>
+                    <option value="1">Class Room</option>
+                    <option value="2">Virtual</option>
+                  </select>
+                </div>  
+              </div>
+              <div class="form-group">
+                <label for="course_name">Course Name</label>
+                <input type="text" class="form-control  text-dark" id="course_name" placeholder="Course Name">
+              </div>
+              <div class="row">
+                <div class="form-group col-md-6">   
+                    <label for="start_date">Start Date</label>                 
+                    <div class="input-group date">
+                        <input type="date" class="form-control" id="start_date">                       
+                    </div>
+                </div>  
+                <div class="form-group col-md-6">   
+                    <label for="end_date">End Date</label>                 
+                    <div class="input-group date">
+                        <input type="date" class="form-control" id="end_date">                       
+                    </div>
+                </div>  
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="start_time">Start Time</label>
+                        <input type="time" class="form-control text-dark" id="start_time" placeholder="Start time">
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="duration">Duration</label>
+                        <input type="text" class="form-control text-dark" id="duration" placeholder="Duration">
+                      </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="lectures">Lectures</label>
+                        <input type="text" class="form-control text-dark" id="lectures" placeholder="Lectures">
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="levels">Levels</label>
+                        <input type="text" class="form-control text-dark" id="levels" placeholder="Levels">
+                      </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="enrolled">Enrolled Count</label>
+                        <input type="text" class="form-control text-dark" id="enrolled" placeholder="Enrolled">
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="video">Video Count</label>
+                        <input type="text" class="form-control text-dark" id="video" placeholder="Video">
+                      </div>
+                </div>
+                <div class="row">
+                  <div class="form-group col-md-6">
+                    <label for="language">Select Language</label>
+                    <select class="form-control text-dark" id="language">
+                      <option value="">Select Language</option>
+                      <option value="English">English</option>
+                      <option value="Arabic">Arabic</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="location">Location</label>
+                    <input type="text" class="form-control text-dark" id="location" placeholder="Location">
+                  </div>
+              </div>          
+              
+              <div class="form-group">
+                <label class="form-label" for="customFile">Upload Banner</label>
+                <input type="file" class="form-control" id="file-upload" />
+              </div>              
+             
+              <div class="form-group">
+                <label for="overview">Overview</label>
+                <textarea class="form-control" id="overview" rows="4"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="course_outline">Course Outline</label>
+                <textarea class="form-control" id="course_outline" rows="4"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary mr-2" id="add-course">Submit</button>             
+            </div>
+          </div>
+        </div>
+      </div>
+     
+    </div>
+  </div>
+  <!-- content-wrapper ends -->
+  
+</div>
+<div class="feedback-section" id="feedbackSection"><span></span></div>
+<!-- main-panel ends -->
+<script type="text/javascript">  
+  $(document).ready(function () {   
+    const  mediaFilesacceptedExtensions = [ "jpg", "png","jpeg"];
+    let mediaFiles=[];
+    let file ='';
+    $('body').on('click','#add-course',function () {        
+        var course_name = $('#course_name').val();
+        var start_date = $('#start_date').val();
+        var end_date = $("#end_date").val();
+        var start_time = $('#start_time').val();     
+        var duration = $('#duration').val();     
+        var lectures = $('#lectures').val();     
+        var levels = $('#levels').val();     
+        var enrolled = $('#enrolled').val();     
+        var video = $('#video').val();     
+        var overview = $('#overview').val();     
+        var course_outline = $('#course_outline').val();     
+
+        var category = $('#category').val();    
+        var course_type = $('#course_type').val();    
+        var language = $('#language').val();    
+        var location = $('#location').val();  
+
+        if(category==""){
+            messageDisplay("Please select category");
+            return false;
+        }
+        if(course_type==""){
+            messageDisplay("Please select course type");
+            return false;
+        }
+        if(course_name==""){
+            messageDisplay("Please enter course name");
+            return false;
+        }
+        if(start_date==""){
+            messageDisplay("Please select start date");
+            return false;
+        }  
+        if(end_date==""){
+            messageDisplay("Please select end date");
+            return false;
+        }
+        if(start_time==""){
+            messageDisplay("Please selelct start time");
+            return false;
+        }
+
+        if(duration==""){
+            messageDisplay("Please enter course duration");
+            return false;
+        }
+        if(lectures==""){
+            messageDisplay("Please enter lectures");
+            return false;
+        }  
+        if(levels==""){
+            messageDisplay("Please enter level");
+            return false;
+        }
+        if(enrolled==""){
+            messageDisplay("Please enter enrolled count");
+            return false;
+        }
+        if(video==""){
+            messageDisplay("Please enter video");
+            return false;
+        }  
+        if(language==""){
+            messageDisplay("Please select language");
+            return false;
+        }
+        if(location==""){
+            messageDisplay("Please enter location");
+            return false;
+        }
+        if(overview==""){
+            messageDisplay("Please enter course overview");
+            return false;
+        }
+        if(course_outline==""){
+            messageDisplay("Please enter course outline");
+            return false;
+        }
+      
+        let element=$(this);
+        element.attr("disabled","disabled").html("Please Wait..");
+        let formData=new FormData(); 
+
+            formData.append('course_name',course_name);   
+            formData.append('start_date',start_date);       
+            formData.append('end_date',end_date);   
+            formData.append('start_time',start_time); 
+            formData.append('duration',duration);   
+            formData.append('lectures',lectures);       
+            formData.append('levels',levels);   
+            formData.append('enrolled',enrolled); 
+            formData.append('video',video);       
+            formData.append('overview',overview);   
+            formData.append('course_outline',course_outline); 
+
+            formData.append('category',category);
+            formData.append('course_type',course_type);
+            formData.append('language',language);
+            formData.append('location',location);
+
+            formData.append('upload_file', mediaFiles[0]);    
+
+        $.ajax({
+            type: "POST",
+            url: '/admin/add-course-data',           
+            data: formData,
+            dataType: "json",
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {          
+                if (data.success) {
+                    messageDisplay(data.message, 2000, "success");   
+                    setTimeout(function(){ 
+                       window.location.href = "/admin/courses-list";
+                        }, 2000); 
+               } else {
+                    messageDisplay(data.message, 2000, "error");                   
+               }   
+            },
+        });
+    }).on('change','#file-upload',function (e){
+        var files = e.target.files;
+        var element=$(this);
+        var incerement=0;
+
+        if ($(this).get(0).files.length != 0) {
+            $.each(files, function (i, file) {
+                console.log(files[i].type);
+
+                var FileType = files[i].type;
+                var filename = files[i].name;
+                console.log(filename);
+                var reader = new FileReader();
+                reader.onload = function (e) {
+
+                    var fileExtension = FileType.substr((FileType.lastIndexOf('/') + 1));
+                    var Extension = fileExtension.toLowerCase();
+                    let showFileName = '';
+                    let filePath = '/static/img/file.png';
+                    if ($.inArray(Extension, mediaFilesacceptedExtensions) === -1) {
+                        showFileName = filename;
+                    } else {
+                        filePath = e.target.result;
+                    }
+                    incerement++;
+
+                    mediaFiles = [];
+                    mediaFiles.push(file);
+
+                    // let html = `<div class="attachimage-box" style="background: url(${filePath}) no-repeat center;">
+                    //         <div class="delete-file delete-image">
+                    //             <i class="fas fa-trash-alt"></i>
+                              
+                    //         </div>
+                    //           <div>${showFileName}</div>
+                    //     </div>`;
+                    // $("#files-wrapper").prepend(html);
+
+                    // if (files.length == incerement) {
+                    //     element.val("");
+                    // }
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+    }); 
+
+  function messageDisplay(message, timeOut, type) {
+
+    type = $.trim(type);
+    if (type == "") {
+        type = "error";
+    }
+    if ($.trim(timeOut) == "") {
+        timeOut = 1500;
+    }
+    var element = $(".feedback-section");
+    var color = "#f06b7c";
+    if (type == "success") {
+        color = "#4caf50";
+    } else if (type == "error") {
+        color = "#f06b7c";
+    }
+    element.attr("style", "background-color:" + color);
+    $("div.feedback-section span").html(message);
+    element.animate({
+        height: 70
+    }, 300).show();
+
+    if (timeOut != -1) {
+        setTimeout(function () {
+            element.animate({
+                height: 0
+            }, 300, function () {
+                element.hide();
+            });
+        }, timeOut);
+    }
+
+  }
+    });
+</script>    
+<%- include ("../../partials/admin-header.ejs") %>
+<!-- <script src="/public/js/admin/add-course.js" type="application/javascript"></script> -->

@@ -1,0 +1,166 @@
+<%- include ("../../partials/admin-side-bar.ejs") %>
+ <!-- partial -->
+
+ <div class="main-panel">
+  <div class="content-wrapper">
+    
+    <div class="row">        
+      <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <div class="mb-3 text-dark admin-heading d-flex">
+              <a href="/admin/category-list">
+                  <img src="../../images/back_arrow.svg" class="mb-2" style="width: 25px;">
+              </a> <h4 class="card-title ml-3">Edit Category</h4>
+            </div>                        
+            <div class="forms-sample col-md-8 mt-5">
+              <div class="form-group">
+                <label for="category">Category</label>
+                <input type="text" value="<%= category.category; %>" class="form-control" id="category" placeholder="Category">
+              </div>             
+              <div class="form-group">
+                <label for="content">Content</label>
+                <textarea class="form-control" id="content" rows="4"><%= category.content; %></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary mr-2" id="edit-category" data-id="<%= category.id; %>">Submit</button>             
+            </div>
+          </div>
+        </div>
+      </div>
+     
+    </div>
+  </div>
+  <!-- content-wrapper ends -->
+  
+</div>
+<div class="feedback-section" id="feedbackSection"><span></span></div>
+<!-- main-panel ends -->
+<script type="text/javascript">  
+  $(document).ready(function () {   
+    const  mediaFilesacceptedExtensions = [ "jpg", "png","jpeg"];
+    let mediaFiles=[];
+    let file ='';
+    $('body').on('click','#edit-category',function () {        
+        var category = $('#category').val();
+        var content = $('#content').val();     
+        var id = $(this).attr('data-id');     
+
+        if(category==""){
+            messageDisplay("Please enter category");
+            return false;
+        }
+        if(content==""){
+            messageDisplay("Please enter content");
+            return false;
+        } 
+        let element=$(this);
+        element.attr("disabled","disabled").html("Please Wait..");
+        let formData=new FormData(); 
+            formData.append('category',category);   
+            formData.append('content',content);  
+            formData.append('id',id);  
+
+        $.ajax({
+            type: "POST",
+            url: '/admin/edit-category-data',           
+            data: formData,
+            dataType: "json",
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {          
+                if (data.success) {
+                    messageDisplay(data.message, 2000, "success");   
+                    setTimeout(function(){ 
+                       window.location.href = "/admin/category-list";
+                        }, 2000); 
+               } else {
+                    messageDisplay(data.message, 2000, "error");                   
+               }   
+            },
+        });
+    }).on('change','#file-upload',function (e){
+        var files = e.target.files;
+        var element=$(this);
+        var incerement=0;
+
+        if ($(this).get(0).files.length != 0) {
+            $.each(files, function (i, file) {
+                console.log(files[i].type);
+
+                var FileType = files[i].type;
+                var filename = files[i].name;
+                console.log(filename);
+                var reader = new FileReader();
+                reader.onload = function (e) {
+
+                    var fileExtension = FileType.substr((FileType.lastIndexOf('/') + 1));
+                    var Extension = fileExtension.toLowerCase();
+                    let showFileName = '';
+                    let filePath = '/static/img/file.png';
+                    if ($.inArray(Extension, mediaFilesacceptedExtensions) === -1) {
+                        showFileName = filename;
+                    } else {
+                        filePath = e.target.result;
+                    }
+                    incerement++;
+
+                    mediaFiles = [];
+                    mediaFiles.push(file);
+
+                    // let html = `<div class="attachimage-box" style="background: url(${filePath}) no-repeat center;">
+                    //         <div class="delete-file delete-image">
+                    //             <i class="fas fa-trash-alt"></i>
+                              
+                    //         </div>
+                    //           <div>${showFileName}</div>
+                    //     </div>`;
+                    // $("#files-wrapper").prepend(html);
+
+                    // if (files.length == incerement) {
+                    //     element.val("");
+                    // }
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+    }); 
+
+  function messageDisplay(message, timeOut, type) {
+
+    type = $.trim(type);
+    if (type == "") {
+        type = "error";
+    }
+    if ($.trim(timeOut) == "") {
+        timeOut = 1500;
+    }
+    var element = $(".feedback-section");
+    var color = "#f06b7c";
+    if (type == "success") {
+        color = "#4caf50";
+    } else if (type == "error") {
+        color = "#f06b7c";
+    }
+    element.attr("style", "background-color:" + color);
+    $("div.feedback-section span").html(message);
+    element.animate({
+        height: 70
+    }, 300).show();
+
+    if (timeOut != -1) {
+        setTimeout(function () {
+            element.animate({
+                height: 0
+            }, 300, function () {
+                element.hide();
+            });
+        }, timeOut);
+    }
+
+  }
+    });
+</script>    
+<%- include ("../../partials/admin-header.ejs") %>
+<!-- <script src="/public/js/admin/add-course.js" type="application/javascript"></script> -->

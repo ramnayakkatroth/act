@@ -1,0 +1,172 @@
+
+
+
+
+
+
+<%- include ('../partials/header2.ejs') %>
+<style type="text/css">
+    .course-details li.nav-item {
+      border-bottom: solid 1px #1faae1;
+  
+  }
+  </style>
+      <!--=================================
+      Inner Header -->
+      <section class="inner-header bg-holder bg-overlay-black-90" style="background-image: url('images/bg/03.jpg');">
+        <div class="container">
+          <div class="row align-items-center position-relative">
+            <div class="col-md-6 text-center text-md-start mb-2 mb-md-0">
+              <h1 class="breadcrumb-title mb-0 text-white">Course Detail</h1>
+            </div>
+            <div class="col-md-6">
+              <ol class="breadcrumb d-flex justify-content-center justify-content-md-end ms-auto">
+                <li class="breadcrumb-item"><a href="/"><i class="fas fa-home me-1"></i>Home</a></li>
+                <li class="breadcrumb-item active"><a href="/courses"><span>Course</span></a></li>
+                <li class="breadcrumb-item active"><span><%= course.course_name; %></span></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!--=================================
+      Inner Header -->
+      
+      <!--=================================
+      Course Details -->
+      <section class="space-ptb course-details">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-7 col-xl-8">
+              <img class="img-fluid  mb-4" src="../../../<%= course.banner; %>" alt="">
+              <h4 class="news-title mb-2"><%= course.course_name; %></h4>
+            </div>
+             <div class="col-md-5 col-xl-4 mt-5 mt-md-0">
+              <div class="widgets">
+              
+                
+               
+                <div class="widget widget-course-info">
+                  <h6 class="widget-title">Course info</h6>
+                  <div class="widget-content">
+                    <ul class="list">
+                      <li>
+                        <b>Course Date :</b>
+                        <span><%= course.start_date; %> - <%= course.end_date; %></span>
+                      </li>
+                      <li>
+                        <b>Time : </b>
+                        <span><%= course.start_time; %></span>
+                      </li>
+                      <li>
+                        <b>Duration : </b>
+                        <span><%= course.duration; %></span>
+                      </li>
+                      <li>
+                        <b>Lectures : </b>
+                        <span><%= course.lectures; %></span>
+                      </li>
+                      <li>
+                        <b>Levels : </b>
+                        <span><%= course.levels; %></span>
+                      </li>
+                      <li>
+                        <b>Enrolled : </b>
+                        <span><%= course.enrolled; %> Students</span>
+                      </li>
+                      <li>
+                        <b>Video : </b>
+                        <span><%= course.video; %> Hours</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+  
+    <section class="space-ptb course-details pt-0">
+     
+        <div class="container">
+          <div class="row">
+  <!-- Tab panes -->
+    <ul class="nav nav-tabs" id="myTab" role="tablist" >
+                <li class="nav-item">
+                  <a class="nav-link active" id="description-tab" data-bs-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">Overview</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="tab-reviews" data-bs-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">Course Outline</a>
+                </li>
+                <!-- <li class="nav-item">
+                  <a class="nav-link mb-0" id="custom-tab" data-bs-toggle="tab" href="#custom" role="tab" aria-controls="custom" aria-selected="false">Assocaition</a>
+                </li> -->
+                <li class="nav-item">
+                  <a class="nav-link mb-0" id="custom-tab" data-bs-toggle="tab" href="#virtual" role="tab" aria-controls="custom" aria-selected="false">Virtual Learning</a>
+                </li>
+              </ul>
+              <div class="tab-content mt-5" id="myTabContent">
+                <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <%= course.overview; %>
+                    </div>
+                  </div>
+                
+                </div>
+                <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="tab-reviews">
+                  <div class="row">                  
+                     <div class="col-sm-6">
+                       <span class="lead text-dark fw-6">Main features</span>
+                       <%= course.course_outline; %>
+                    </div>                     
+                  </div>                 
+                </div>
+                <div class="tab-pane fade" id="virtual" role="tabpanel" aria-labelledby="custom-tab">
+                <section class="space-ptb course-details p-0">
+        <div class="container">
+          <div class="row">
+
+            <% for (var i = 0; i < virtualCourseDetails.length; i++) { %>
+              <div class="col-lg-4 col-sm-6 mb-4 pb-2">
+                <div class="event">
+                  <div class="event-img">
+                    <img class="img-fluid" src="../../../<%= virtualCourseDetails[i].banner; %>" alt="">
+                    <div class="event-date">
+                      <!-- 18 -->
+                      <small><%= virtualCourseDetails[i].month; %></small>
+                      <span class="years"><%= virtualCourseDetails[i].year; %></span>
+                    </div>
+                  </div>
+                  <div class="event-info">
+                    <ul class="meta-event">
+                      <li><i class="far fa-clock"></i><%= virtualCourseDetails[i].start_date; %> - <%= virtualCourseDetails[i].end_date; %></li>
+                      <li><i class="fas fa-map-marker-alt"></i><%= virtualCourseDetails[i].location; %></li>
+                    </ul>
+                    <h6 class="event-title"><a href="#"><%= virtualCourseDetails[i].course_name; %></a></h6>
+                    <p><%= virtualCourseDetails[i].overview; %></p>
+                    <a class="btn btn-link" href="#">Join Now</a>
+                  </div>
+                </div>
+              </div>  
+              <% } %>    
+                   
+          
+          </div>
+        </div>
+      </section>
+                </div>
+                <div class="tab-pane fade" id="custom" role="tabpanel" aria-labelledby="custom-tab">
+                
+                </div>
+              </div>             
+            </div>
+           
+          </div>
+        </div>
+      </section>
+      <!--=================================
+      Course Details -->
+<%- include ('../partials/footer.ejs') %>

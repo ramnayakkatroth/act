@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<!-- Mirrored from themes.potenzaglobalsolutions.com/html/guruma/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 22 May 2022 12:42:18 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="HTML5 Template" />
+    <meta name="description" content="Guruma - Online Course & Education HTML Template" />
+    <meta name="author" content="potenzaglobalsolutions.com" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Act-Leaders</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="images/elearning.png" />
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <!-- CSS Global Compulsory (Do not remove)-->
+    <link rel="stylesheet" href="css/font-awesome/all.min.css" />
+    <link rel="stylesheet" href="css/flaticon/flaticon.css" />
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
+
+    <!-- Page CSS Implementing Plugins (Remove the plugin CSS here if site does not use that feature) -->
+    <link rel="stylesheet" href="css/select2/select2.css" />
+    <link rel="stylesheet" href="css/slick/slick-theme.css" />
+
+    <!-- Template Style -->
+    <link rel="stylesheet" href="css/style.css" />
+
+  </head>
+  <body>
+
+   
+
+
+    <!--=================================
+    Login -->
+    <section class="space-ptb login">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="section-title text-center">
+              <h2>LOGIN</h2>
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-lg-7 col-md-10 col-sm-11">
+           
+            <div class="tab-content" id="myTabContent">
+              <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
+                <div class="row mt-4 mb-4 mb-sm-5 align-items-center form-flat-style">
+                  <div class="mb-3 col-sm-12">
+                    <label class="form-label">Username:</label>
+                    <input type="text" class="form-control" id="adminEmail" placeholder="">
+                  </div>
+                  <div class="mb-3 col-sm-12">
+                    <label class="form-label">Password:</label>
+                    <input type="Password" class="form-control" id="adminPassword" placeholder="">
+                  </div>
+                  <div class="col-sm-12 d-grid mt-5">
+                    <button type="submit" class="btn btn-primary btn-flat" id="login_btn">Login</button>
+                  </div>                 
+                </div>               
+              </div>            
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--=================================
+    Login -->
+
+
+    <!--=================================
+    Back To Top -->
+    <div id="back-to-top" class="back-to-top">
+      <a href="#"><i class="fas fa-chevron-up"></i></a>
+    </div>
+    <div class="feedback-section" id="feedbackSection"><span></span></div>
+    <!--=================================
+    Back To Top -->
+    
+    <!--=================================
+    Javascript -->
+
+    <!-- JS Global Compulsory (Do not remove)-->
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/popper/popper.min.js"></script>
+    <script src="js/bootstrap/bootstrap.min.js"></script>
+    
+    <!-- Page JS Implementing Plugins (Remove the plugin script here if site does not use that feature)-->
+    <script src="js/jquery.appear.js"></script>
+    <script src="js/select2/select2.full.js"></script>
+    <script src="js/slick/slick.min.js"></script>
+    
+    <!-- Template Scripts (Do not remove)-->
+    <script src="js/custom.js"></script>
+
+    <!-- <script src="../../public/js/global.js"></script> -->
+    <script>
+        $(document).ready(function () {          
+            $('body').on('click','#login_btn',function (){
+              var adminEmail = $('#adminEmail').val();
+                var adminPassword = $('#adminPassword').val();
+
+                if (adminEmail == "" || adminEmail == null) {
+                    messageDisplay("Please enter email", 1500, "error");
+                    $("#adminEmail").focus();
+                    return false;
+                }
+                // if (!emailExpr.test(adminEmail)) {
+                //     messageDisplay("Please enter valid email", 1500, "error");
+                //     $("#adminEmail").focus();
+                //     return false;
+                // }
+                if (adminPassword == "" || adminPassword == null) {
+                    messageDisplay("Please enter password", 1500, "error");
+                    $("#adminPassword").focus();
+                    return false;
+                }
+          let formData=new FormData(); 
+          formData.append('email',adminEmail);   
+          formData.append('password',adminPassword);           
+          // element.attr("disabled","disabled").html("Please Wait..");
+        $.ajax({
+            type: "POST",
+            url: '/verfiy-login',           
+            data: formData,
+            dataType: "json",
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {          
+              if (data.success) {    
+                        messageDisplay("Successfully logged in", 2000, "success");                          
+                            setTimeout(function(){ 
+                            window.location.href='/admin/dashboard';
+                            }, 2000);                          
+                   } else {
+                        messageDisplay(data.message, 2000, "error");                   
+                   } 
+            },
+        });
+      })   
+        
+           
+          
+            function messageDisplay(message, timeOut, type) {
+
+type = $.trim(type);
+if (type == "") {
+    type = "error";
+}
+
+if ($.trim(timeOut) == "") {
+    timeOut = 1500;
+}
+
+var element = $(".feedback-section");
+var color = "#f06b7c";
+if (type == "success") {
+    color = "#4caf50";
+} else if (type == "error") {
+    color = "#f06b7c";
+}
+element.attr("style", "background-color:" + color);
+$("div.feedback-section span").html(message);
+element.animate({
+    height: 70
+}, 300).show();
+
+if (timeOut != -1) {
+    setTimeout(function () {
+        element.animate({
+            height: 0
+        }, 300, function () {
+            element.hide();
+        });
+    }, timeOut);
+}
+
+}
+        });
+        function postData(url,parameters,callback){
+    $.post(url,parameters,function(data){
+        if(typeof callback == "function"){
+            callback(data);
+        }
+    });
+}
+function ajaxData(url, parameters, callback) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: parameters,
+        dataType: "json",
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (data) {
+            if (typeof callback == "function") {
+                callback(data);
+            }
+        },
+        error: function () {
+            if (typeof callback == "function") {
+                callback('{"success": false,"message": "Oops..! Something went wrong try again later"}');
+            }
+        }
+    });
+}  
+    </script>
+    
+  </body>
+
+</html>

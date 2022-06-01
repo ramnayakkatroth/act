@@ -1,0 +1,279 @@
+<%- include ('../partials/header2.ejs') %>
+  <style>
+    .form-control{
+      border-radius:0px !important;
+    }
+  </style>
+    <!--=================================
+    Inner Header -->
+    <section class="space-ptb bg-holder bg-overlay-black-90" style="background-image: url('images/bg/03.jpg');">
+      <div class="container position-relative">
+        <div class="find-Course">
+          <div class="row">
+            <div class="col-md-12 text-center">
+              <h3 class="text-white mb-4">Our Courses</h3>
+            </div>
+          </div>
+       
+        </div>
+      </div>
+  </section>
+  <input type="hidden" value="<%= courses[0].category; %>" id="category">
+  <!--=================================
+  Inner Header -->
+
+  <!--=================================
+  Course Details -->
+  <section class="space-ptb course-list">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="widgets">
+           
+            <div class="widget widget-Categories">
+              <h6 class="widget-title">Categories</h6>
+              <div class="card-body ">
+                 <form class="col-md-10 ">
+              <div class="mb-3 select-border col-sm-12">
+                  <label class="form-label">Course type</label>
+                  <select class="form-control basic-select" id="course_type">
+                    <option value="">Select Course Type</option>
+                    <%  if(courseType){
+                      for (var i = 0; i < courseType.length; i++) {
+                        let course_type = "";
+                        if(courseType[i].course_type == 1){
+                          course_type = "Class Rooms";
+                        }else{
+                          course_type = "Virtual Classes";
+                        }    
+                        %>
+                        <option value="<%= courseType[i].course_type%>"><%= course_type %></option>                                         
+                      <%
+                      }
+                    } %> 
+                  </select>
+                </div>
+                <!----->
+                 <div class="mb-3 select-border col-sm-12">
+                  <label class="form-label">City</label>
+                  <select class="form-control basic-select" id="location">
+                    <option value="">Selelct City</option>
+                    <%  if(courseLocation){
+                      for (var i = 0; i < courseLocation.length; i++) { %>
+                        <option value="<%= courseLocation[i].location%>"><%= courseLocation[i].location%></option>                                         
+                      <%
+                      }
+                    } %> 
+                  </select>
+                </div>
+                 <!----->
+                 <div class="mb-3 select-border col-sm-12">
+                  <label class="form-label">Language</label>
+                  <select class="form-control basic-select" id="language">
+                    <option value="">Selelct Language</option>
+                    <option value="English">English</option>
+                    <option value="Arabic">Arabic</option>
+                  </select>
+                </div>              
+                <!----->
+                 <div class="mb-3 select-border col-sm-12">
+                  <label class="  ">Month</label>
+                  <select class="form-control basic-select" id="month">
+                
+                   
+                      <option value="">Select Month</option>
+                      <%  for (var i = 0; i < courseMonth.length; i++) {
+                        let monthname = "";
+                        if(courseMonth[i].month =='01'){
+                          monthname ="January";
+                        }
+                        if(courseMonth[i].month =='02'){
+                          monthname ="February";
+                        }
+                        if(courseMonth[i].month =='03'){
+                          monthname ="March";
+                        }
+                        if(courseMonth[i].month =='04'){
+                          monthname = "April";
+                        }
+                        if(courseMonth[i].month =='05'){
+                          monthname ="May";
+                        }
+                        if(courseMonth[i].month =='06'){
+                          monthname = "June";
+                        }
+                        if(courseMonth[i].month =='07'){
+                          monthname ="July";
+                        }
+                        if(courseMonth[i].month =='08'){
+                          monthname = "August";
+                        }
+                        if(courseMonth[i].month =='09'){
+                          monthname ="September";
+                        }
+                        if(courseMonth[i].month =='10'){
+                          monthname ="October";
+                        }
+                        if(courseMonth[i].month =='11'){
+                          monthname ="November";
+                        }
+                        if(courseMonth[i].month =='12'){
+                          monthname ="December";
+                        }
+                        %>
+                          <option value="<%= courseMonth[i].month%>"><%= monthname %></option>                                         
+                        <%
+                      
+                      } %> 
+                  </select>
+                  
+                </div>
+                <!----->
+                 <div class="mb-3 select-border col-sm-12">
+                  <label class="form-label">Year</label>
+                  <select class="form-control basic-select" id="year">
+                    <option value="">Select Year</option>
+                    <%  if(courseYear){
+                      for (var i = 0; i < courseYear.length; i++) { %>
+                        <option value="<%= courseYear[i].year%>"><%= courseYear[i].year%></option>                                         
+                      <%
+                      }
+                    } %> 
+                   
+                  </select>
+                </div>
+                <!----->
+                <button type="button" class="btn btn-primary btn-lg w-100" id="filterBtn">Search</button>
+                <!----->
+              </div>
+            </form>
+            </div>
+           
+          </div>
+        </div>
+        <div class="col-lg-8 mt-5 mt-lg-0">
+        <section class="course-details">
+      <div class="container">       
+          <div>  
+            <div class="row" id="filtereddata">
+              <% for (var i = 0; i < courses.length; i++) {
+                let course_types = "";
+                if(courses[i].course_type == 1){
+                  course_types = "Class Rooms";
+                }else{
+                  course_types = "Virtual Classes";
+                }
+                %>
+            <div class="col-lg-6 col-sm-6 mb-4 pb-2" id="filter">
+              <div class="event">
+                <div class="event-img">
+                  <a href="/course-details/<%= Buffer.from("courseList="+courses[i].id).toString('base64')%>">
+                    <img class="img-fluid" src="../../../<%= courses[i].banner; %>" alt="">
+                  </a>                  
+                </div>
+                <div class="event-info">
+                  <a href="/course-details/<%= Buffer.from("courseList="+courses[i].id).toString('base64')%>">
+                    <h6 class="event-title mb-2"><%= courses[i].course_name; %></h6>
+                  </a>  
+                  
+                  <ul class="meta-event flex-column">
+                    <li><i class="fas fa-calendar"></i>From <%= courses[i].start_date; %> - To<%= courses[i].end_date; %></li>
+                    <li><i class="far fa-flag"></i><%= courses[i].location; %></li>
+                   
+                    <li><i class="far fa-bookmark "></i><%= course_types; %></li>
+                    <li><i class="fa fa-map-signs"></i><%= courses[i].language; %></li>                    
+                  </ul>                  
+                </div>
+                <a class="btn  btn-sm btn-primary rounded-0 w-100" href="/registration">Register Now</a>
+              </div>
+            </div>
+            <% } %>    
+          </div>
+         
+        </div>
+       
+      </div>
+    </section>
+
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!--=================================
+  Course Details -->
+
+  <%- include ('../partials/footer.ejs') %>
+  <script type="text/javascript">
+    $(document).ready(function () {      
+        $('body').on('click','#filterBtn',function (){
+          let course_type = $('#course_type').val();  
+          let location = $('#location').val(); 
+          let language = $('#language').val(); 
+          let month = $('#month').val(); 
+          let year = $('#year').val(); 
+          let category = $('#category').val(); 
+
+          let formData=new FormData(); 
+          formData.append('course_type',course_type);   
+          formData.append('location',location);   
+          formData.append('language',language);   
+          formData.append('month',month);   
+          formData.append('year',year);   
+          formData.append('category',category);   
+
+          $.ajax({
+              type: "POST",
+              url: '/filter-data',           
+              data: formData,
+              dataType: "json",
+              cache: false,
+              contentType: false,
+              processData: false,
+              success: function (data) {          
+                if(data.filter){
+                   $('#filter').addClass('d-none');
+                        console.log(data.filter);
+                      let filter_data = data.filter;
+                        var tag ="";
+                        filter_data.forEach(function (data) {    
+                          let courseType = "";
+                          if(data.course_type == 1){
+                            courseType = "Class Rooms";
+                          }else{
+                            courseType = "Virtual Classes";
+                          }                       
+                          tag += '<div class="col-lg-6 col-sm-6 mb-4 pb-2" id="filter">'+
+                                  '<div class="event">'+
+                                    '<div class="event-img">'+
+                                      '<a href="/course-details/'+data.id+'">'+
+                                        '<img class="img-fluid" src="../../../'+data.banner+'" alt="">'+
+                                      '</a>'+                                       
+                                    '</div>'+
+                                    '<div class="event-info">'+
+                                      '<h6 class="event-title mb-2"><a href="#">'+data.course_name+'</a></h6>'+
+                                      '<ul class="meta-event flex-column">'+
+                                        '<li><i class="fas fa-calendar"></i>From '+data.start_date+' - To'+ data.end_date+'</li>'+
+                                        '<li><i class="far fa-flag"></i>'+data.location+'</li>'+
+                                        '<li><i class="far fa-bookmark "></i>'+courseType+'</li>'+
+                                        '<li><i class="fa fa-map-signs"></i>'+data.language+'</li>'+                    
+                                      '</ul>'+                  
+                                    '</div>'+
+                                    '<a class="btn  btn-sm btn-primary rounded-0 w-100" href="#">Register Now</a>'+
+                                  '</div>'+
+                                '</div>'
+                          
+                        $("#filtereddata").html(tag);
+                        });
+                  
+                    }else{
+                       tag = '<img class="notFoundImage" src= "' + BASE_URL + '/img/not-found.jpg">' 
+                                    
+                        }
+              },
+          });
+        })     
+        
+    })
+  
+  </script>
